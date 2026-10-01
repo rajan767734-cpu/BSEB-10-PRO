@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BSEB 10 Pro</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f7fb;color:#182033;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+header{background:linear-gradient(135deg,#4020b7,#7047ff);color:#fff;padding:24px 18px 30px;border-radius:0 0 28px 28px}.wrap{max-width:760px;margin:auto;padding:0 15px}
+h1{margin:0;font-size:27px}header p{margin:5px 0;opacity:.9}.hero{margin-top:17px;background:#ffffff20;padding:15px;border-radius:18px}
+main{padding:15px 0 80px}.card{background:#fff;border-radius:18px;padding:17px;margin:12px 0;box-shadow:0 5px 20px #17213d10}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.subject{border:0;background:#fff;border-radius:17px;padding:17px;text-align:left;box-shadow:0 4px 18px #17213d10;cursor:pointer}.subject .ico{font-size:30px}.small{color:#6c7487;font-size:13px}.btn{border:0;background:#5c35db;color:#fff;border-radius:12px;padding:11px 15px;font-weight:700;cursor:pointer}.light{background:#eeeaff;color:#4b28bd}.back{border:0;background:none;color:#5331c9;font-size:16px;padding:5px 0;cursor:pointer}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{text-align:center}.stat b{display:block;font-size:22px;color:#5632d0}
+.bar{height:9px;background:#e9ebf1;border-radius:10px;overflow:hidden}.fill{height:100%;width:0;background:#6237d8}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.hidden{display:none}
+.option{display:block;width:100%;border:0;background:#f2f4f8;border-radius:12px;padding:13px;margin:8px 0;text-align:left;font-size:15px;cursor:pointer}.correct{background:#dff6e7!important;color:#08752f}.wrong{background:#ffe3e3!important;color:#ae1d1d}
+nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e8e8ee;display:flex;justify-content:center;gap:25px;padding:9px;z-index:5}nav button{border:0;background:none;color:#525b70;font-size:12px}
+.tag{display:inline-block;background:#eeeaff;color:#5130c5;border-radius:20px;padding:5px 9px;font-size:12px;margin:3px}.search{width:100%;padding:13px;border:1px solid #ddd;border-radius:12px;font-size:15px}.list{padding:13px 0;border-bottom:1px solid #eee}.timer{font-size:25px;font-weight:800}
+</style></head>
+<body>
+<header><div class="wrap"><h1>📚 BSEB 10 PRO</h1><p>Bihar Board Class 10 • 2027 Preparation</p>
+<div class="hero"><b>🎯 Target: 90%+</b><div class="small" style="color:#eee">Daily practice • PYQ • Mock Test • Progress</div></div></div></header>
+<main class="wrap">
+
+<section id="home">
+<div class="card stats"><div class="stat"><b id="tests">0</b>Tests</div><div class="stat"><b id="correct">0</b>Correct</div><div class="stat"><b id="points">0</b>Points</div></div>
+<div class="card"><div class="row"><div><b>📈 Preparation</b><div class="small">Practice progress</div></div><b id="pct">0%</b></div><div class="bar" style="margin-top:10px"><div class="fill" id="homebar"></div></div></div>
+<h2>📚 Subjects</h2><div class="grid" id="subjects"></div>
+<h2>⚡ Quick Practice</h2>
+<div class="grid"><button class="subject" onclick="startQuiz('Daily Test')"><span class="ico">🔥</span><b>Daily Test</b><div class="small">10 mixed MCQs</div></button>
+<button class="subject" onclick="startQuiz('PYQ Practice')"><span class="ico">📝</span><b>PYQ Practice</b><div class="small">Exam-style questions</div></button>
+<button class="subject" onclick="startQuiz('Mock Test')"><span class="ico">🏆</span><b>Mock Test</b><div class="small">Timed practice</div></button>
+<button class="subject" onclick="showWrong()"><span class="ico">🔁</span><b>Wrong Questions</b><div class="small">Retry mistakes</div></button></div>
+</section>
+
+<section id="chapters" class="hidden"><button class="back" onclick="home()">← Home</button><h2 id="stitle"></h2>
+<input class="search" id="search" placeholder="🔍 Chapter search..." oninput="renderChapters()"><div id="chapterList"></div></section>
+
+<section id="quiz" class="hidden"><div class="row"><button class="back" onclick="home()">← Exit</button><span class="timer" id="timer">--:--</span></div>
+<div class="card"><div class="small" id="qcount"></div><h2 id="question"></h2><div id="options"></div></div><div class="card"><div class="bar"><div class="fill" id="qbar"></div></div></div></section>
+
+<section id="result" class="hidden"><div class="card" style="text-align:center"><div style="font-size:55px">🏆</div><h2>Test Complete!</h2><h1 id="score"></h1><p id="resultText"></p><button class="btn" onclick="home()">Back to Home</button></div></section>
+
+<section id="progressPage" class="hidden"><h2>📊 My Progress</h2><div class="card"><h3>Overall</h3><div class="bar"><div class="fill" id="pbar"></div></div><p id="ptext"></p></div><div class="card"><b>🎯 Daily Goal</b><p class="small">आज कम से कम 1 test पूरा करें।</p><span class="tag">Consistency</span><span class="tag">Practice</span><span class="tag">Revision</span></div></section>
+
+<section id="wrongPage" class="hidden"><button class="back" onclick="home()">← Home</button><h2>🔁 Wrong Questions</h2><div id="wrongList"></div></section>
+</main>
+<nav><button onclick="home()">🏠<br>Home</button><button onclick="showProgress()">📊<br>Progress</button><button onclick="startQuiz('Daily Test')">🔥<br>Test</button></nav>
+
+<script>
+const subjects={
+"Hindi":{i:"📕",c:["श्रम विभाजन और जाति प्रथा","विष के दाँत","भारत माता","नागरी लिपि","बहादुर","परंपरा का मूल्यांकन","जित-जित मैं निरखत हूँ","आविन्यों"],q:[
+["‘श्रम विभाजन और जाति प्रथा’ के लेखक कौन हैं?",["डॉ. भीमराव आंबेडकर","प्रेमचंद","दिनकर","निराला"],0],
+["‘भारत माता’ पाठ के लेखक कौन हैं?",["जवाहरलाल नेहरू","गांधीजी","दिनकर","प्रेमचंद"],0]]},
+"English":{i:"📘",c:["The Pace for Living","The Thief's Story","Gillu","The Tiger King","India Through a Traveller's Eyes","A Pinch of Snuff","The Bet","The Letter"],q:[
+["Who wrote 'The Thief's Story'?",["Ruskin Bond","R.K. Narayan","Mulk Raj Anand","Premchand"],0],
+["'The Pace for Living' mainly discusses:",["The fast pace of modern life","A war","A festival","A journey"],0]]},
+"Mathematics":{i:"📐",c:["Real Numbers","Polynomials","Pair of Linear Equations in Two Variables","Quadratic Equations","Arithmetic Progressions","Triangles","Coordinate Geometry","Introduction to Trigonometry","Applications of Trigonometry","Circles"],q:[
+["HCF of 12 and 18 is:",["2","3","6","9"],2],["Degree of 3x²+2x+1 is:",["1","2","3","0"],1],["sin 90° equals:",["0","1/2","1","√3/2"],2]]},
+"Science":{i:"🔬",c:["रासायनिक अभिक्रियाएँ एवं समीकरण","अम्ल, क्षारक एवं लवण","धातु एवं अधातु","कार्बन एवं उसके यौगिक","तत्वों का आवर्त वर्गीकरण","नियंत्रण एवं समन्वय","प्रकाश","विद्युत धारा","मानव नेत्र तथा रंगबिरंगा संसार","हमारा पर्यावरण"],q:[
+["जस्ता और dilute HCl की अभिक्रिया में कौन-सी गैस निकलती है?",["O₂","H₂","N₂","CO₂"],1],
+["विद्युत धारा की SI इकाई क्या है?",["Volt","Ohm","Ampere","Watt"],2]]},
+"Social Science":{i:"🌍",c:["भारत में राष्ट्रवाद","समाजवाद एवं साम्यवाद","हिन्द-चीन में राष्ट्रवादी आन्दोलन","भारत में मुद्रण संस्कृति और आधुनिक दुनिया","अर्थव्यवस्था और आजीविका","कृषि","उद्योग","परिवहन, संचार एवं व्यापार","लोकतंत्र में सत्ता की साझेदारी","संघवाद"],q:[
+["Rowlatt Act किस वर्ष पारित हुआ?",["1917","1919","1921","1930"],1],
+["Dandi March किस आंदोलन से संबंधित था?",["Civil Disobedience","Quit India","Non-Cooperation","Swadeshi"],0]]},
+"Sanskrit":{i:"🕉️",c:["मंगलम्","पाटलिपुत्रवैभवम्","अलसकथा","संस्कृतसाहित्ये लेखिकाः","भारतमहिमा","भारतीयसंस्कारः"],q:[
+["‘मंगलम्’ का अर्थ है:",["कल्याण","युद्ध","वन","जल"],0],["‘अलसकथा’ का अर्थ है:",["आलसी की कथा","राजा की कथा","युद्ध की कथा","नदी की कथा"],0]]}
+};
+let S=JSON.parse(localStorage.getItem("bseb10v2")||'{"tests":0,"correct":0,"points":0,"wrong":[]}');
+let sub="",cur=[],n=0,scoreN=0,time=0,tm=null;
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem("bseb10v2",JSON.stringify(S));stats()}
+function stats(){$("tests").textContent=S.tests;$("correct").textContent=S.correct;$("points").textContent=S.points;let p=Math.min(100,S.tests*5);$("pct").textContent=p+"%";$("homebar").style.width=p+"%"}
+function hide(){["home","chapters","quiz","result","progressPage","wrongPage"].forEach(x=>$(x).classList.add("hidden"))}
+function home(){clearInterval(tm);hide();$("home").classList.remove("hidden");stats()}
+function renderSubjects(){$("subjects").innerHTML=Object.entries(subjects).map(([x,d])=>`<button class="subject" onclick="openSub('${x}')"><span class="ico">${d.i}</span><b>${x}</b><div class="small">${d.c.length} chapters</div></button>`).join("")}
+function openSub(x){sub=x;hide();$("chapters").classList.remove("hidden");$("stitle").textContent=subjects[x].i+" "+x;$("search").value="";renderChapters()}
+function renderChapters(){let term=$("search").value.toLowerCase();$("chapterList").innerHTML=subjects[sub].c.map((c,i)=>({c,i})).filter(x=>x.c.toLowerCase().includes(term)).map(x=>`<div class="card row"><div><b>Chapter ${x.i+1}</b><br>${x.c}<div><span class="tag">Objective</span><span class="tag">Practice</span></div></div><button class="btn" onclick="startQuiz('${sub} • Chapter ${x.i+1}')">Start</button></div>`).join("")||'<div class="empty">No chapter found.</div>'}
+function startQuiz(label){hide();$("quiz").classList.remove("hidden");let all=[];Object.values(subjects).forEach(d=>all.push(...d.q));cur=all.sort(()=>Math.random()-.5).slice(0,label.includes("Mock")?10:10);n=0;scoreN=0;time=label.includes("Mock")?600:300;clearInterval(tm);tm=setInterval(()=>{time--;clock();if(time<=0)finish()},1000);showQ()}
+function clock(){let m=Math.floor(time/60),s=time%60;$("timer").textContent=`${m}:${String(s).padStart(2,"0")}`}
+function showQ(){if(n>=cur.length)return finish();let q=cur[n];$("qcount").textContent=`Question ${n+1} / ${cur.length}`;$("question").textContent=q[0];$("options").innerHTML=q[1].map((o,i)=>`<button class="option" onclick="ans(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join("");$("qbar").style.width=(n/cur.length*100)+"%";clock()}
+function ans(i){let q=cur[n],bs=document.querySelectorAll(".option");bs.forEach(b=>b.disabled=true);if(i===q[2]){bs[i].classList.add("correct");scoreN++;S.correct++;S.points+=10}else{bs[i].classList.add("wrong");S.wrong.push(q[0])}setTimeout(()=>{n++;showQ()},500)}
+function finish(){clearInterval(tm);S.tests++;save();hide();$("result").classList.remove("hidden");$("score").textContent=`${scoreN} / ${cur.length}`;$("resultText").textContent=scoreN>=8?"🔥 Excellent! आपकी practice बहुत अच्छी है।":"👍 अच्छा प्रयास! गलत questions दोबारा practice करें।"}
+function showProgress(){hide();$("progressPage").classList.remove("hidden");let p=Math.min(100,S.tests*5);$("pbar").style.width=p+"%";$("ptext").textContent=`${S.tests} tests • ${S.correct} correct answers • ${S.points} points`}
+function showWrong(){hide();$("wrongPage").classList.remove("hidden");let a=[...new Set(S.wrong)];$("wrongList").innerHTML=a.length?a.map((x,i)=>`<div class="card list"><b>${i+1}.</b> ${x}</div>`).join(""):'<div class="card empty">अभी कोई wrong question नहीं है। Test देकर practice शुरू करें।</div>'}
+renderSubjects();stats();
+</script></body></html>
